@@ -341,7 +341,7 @@ MonoBehaviour:
   velocity: 3.06
   time: 9.9
   startPoint: 1.05
-  acceleration: -0.63
+  acceleration: -0.71
 --- !u!4 &1626887880
 Transform:
   m_ObjectHideFlags: 0
