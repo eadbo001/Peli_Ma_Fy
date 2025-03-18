@@ -383,11 +383,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef16ab736728fb749b7d832256b75c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pos: {x: 0, y: 1.5}
-  vel: {x: 700, y: 0.935}
+  pos: {x: 0, y: 0}
+  vel: {x: 5, y: 25}
   accel: {x: 0, y: -9.81}
   n: 2006
-  time: 0.43
+  time: 4.93
 --- !u!1 &1626887878
 GameObject:
   m_ObjectHideFlags: 0
