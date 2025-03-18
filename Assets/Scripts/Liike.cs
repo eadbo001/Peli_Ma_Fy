@@ -23,7 +23,7 @@ public class Liike : MonoBehaviour
 
             //elapsed time
             float t = delta_t * i;
-            //s = vt
+            
             float s = velocity*t + (0.5f * acceleration * (t*t));
 
             //draw the circles
