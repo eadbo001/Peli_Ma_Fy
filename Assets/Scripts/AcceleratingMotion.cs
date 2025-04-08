@@ -25,7 +25,8 @@ public class AcceleratingMotion : MonoBehaviour
         //draw the velocity vector at initial position
         //MyDraw.DrawVectorAt(pos,vel, Color.black);
 
-
+        Vector2 v = vel;
+        Vector2 s = pos;
 
         //simulate accelarating motion: s = s0 + vt + 0.5at^2
 
@@ -37,14 +38,17 @@ public class AcceleratingMotion : MonoBehaviour
             float t = delta_t * i;
 
             //1st update velocity
-            //v = v + a*delta_t;
+            v = v + accel*delta_t;
 
             //2nd update the position 
-            //s = s + v*delta_t;
+            s = s + v*delta_t;
 
             //3rd draw the "physics engine" position
 
-            Vector2 s = pos + vel * t + 0.5f * accel * t * t;
+            Vector2 position = s + v * t + 0.5f * accel * t * t;
+
+            if (i % 60 == 0)
+                MyDraw.DrawVectorAt(s, v, Color.yellow);
 
             Gizmos.color = Color.white;
             Gizmos.DrawSphere(s, 0.05f);

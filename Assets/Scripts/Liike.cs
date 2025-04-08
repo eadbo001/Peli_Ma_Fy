@@ -18,17 +18,22 @@ public class Liike : MonoBehaviour
 
         float delta_t = time / amount;
 
+        
+
         for (int i = 0;i<=amount;i++)
         {
 
             //elapsed time
             float t = delta_t * i;
             
+            //fysiikan mukainen nopeus/kiihtyvyys laskelma
             float s = velocity*t + (0.5f * acceleration * (t*t));
 
             //draw the circles
             Gizmos.color = Color.white;
             Gizmos.DrawSphere(new Vector2(t, s + startPoint), 0.1f);
+
+          
         }
     }
 }
