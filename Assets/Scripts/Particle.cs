@@ -16,6 +16,7 @@ public class Particle : MonoBehaviour
     //Earth-like gravity
     [Header("Gravity")]
     public Vector3 Gravity = new Vector3(0, -9.81f, 0);
+    public bool useGravity = false;
 
     [Header("Wind")]
     public float SurfaceArea = 1.0f;
@@ -33,6 +34,7 @@ public class Particle : MonoBehaviour
     [Header("Buoyancy")]
     public float WaterHeight = 0.0f;
     public float rho = 1000.0f; // 1000 kilograms per cubic meter
+    public bool UseBuoyancy = false;
 
     [Header("Misc")]
     public bool AirResistance = false;
@@ -46,9 +48,12 @@ public class Particle : MonoBehaviour
             Handles.DrawLine(Position, SpringLocation, 3f);
 
         //Water level
-        Handles.color = Color.blue;
-        Handles.DrawLine(new Vector3(-100.0f, WaterHeight, 0.0f),
-                         new Vector3(100.0f, WaterHeight, 0.0f),3f);
+        if (UseBuoyancy)
+        {
+            Handles.color = Color.blue;
+            Handles.DrawLine(new Vector3(-100.0f, WaterHeight, 0.0f),
+                             new Vector3(100.0f, WaterHeight, 0.0f), 3f);
+        }
 
 
     }
@@ -63,6 +68,7 @@ public class Particle : MonoBehaviour
         Vector3 ResultantForce = Vector3.zero;
 
         //Add Gravity;
+        if (useGravity)
         ResultantForce += Gravity * Mass; //G = mg
         // ... add other forces to the resultant!
 
@@ -92,14 +98,16 @@ public class Particle : MonoBehaviour
         //Volume of the Cube
         float V = transform.localScale.x * transform.localScale.y * transform.localScale.z;
         float height = transform.localScale.y;
+        float bottomLevel = Position.y - height / 2f;
+        float topLevel = Position.y + height / 2f;
         //case 1: totally airborne, not under water
-        if (Position.y - height /2.0f >= WaterHeight)
+        if (bottomLevel >= WaterHeight)
         {
             //no lift/buoyancy
             LiftForce = Vector3.zero;
         }
         //case 2: totally under water
-        else if (Position.y + height /2.0f < WaterHeight)
+        else if (topLevel < WaterHeight)
         {
             //F = rho * V * g
             //Force = density * Volume * gravity (opposite the  gravity)
@@ -111,13 +119,14 @@ public class Particle : MonoBehaviour
            
             //how many percantage the object underwater??
             //waterlevel - bottom of object (position.y + height / 2.0f)
-            float underwater = WaterHeight - (Position.y - height/2.0f);
+            float underwater = WaterHeight - (bottomLevel);
             float UWPercantage = underwater / height;
 
             LiftForce = rho * (V * UWPercantage) * (-Gravity);
         }
 
         //Add the lift Force
+        if (UseBuoyancy)
         ResultantForce += LiftForce;
         //endlift / buoyancy
 
@@ -129,6 +138,10 @@ public class Particle : MonoBehaviour
         //(fake air resistance)
         if(AirResistance)
             Velocity *= (1f - 0.1f*Time.fixedDeltaTime);
+
+        //water resitance?
+        if (bottomLevel < WaterHeight)
+                Velocity *= (1f - 2f * Time.fixedDeltaTime);
         //3. update position 
         Position += Velocity * Time.fixedDeltaTime;
 
